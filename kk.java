@@ -1,28 +1,27 @@
 import java.util.*;
 
 public class kk{
-    final static rand = new Random();
+    final static Random rand = new Random();
     public static void main (String[] args){
-        // args[0] - 0 if running normally with inputfile
-        // args[0] - 1 if creating a new inputfile
-        // args[1] - input file
+        // Usage: ./kk inputfile        
 
-        // Creating a new input file to test with
-        if (args[0] == 1) {
-            
-        }
-
-        
-
-        int[] random = generateStdRep();
+        int[] random = generateStd();
         for (int i = 0; i < random.length; i++) {
             System.out.print(random[i] + ", ");
         }
-        System.out.println("residue: " + stdResidue())
+        // System.out.println("residue: " + stdResidue());
+
+        int[] prepartitioned = generatePrePart();
+        for (int i = 0; i < prepartitioned.length; i++) {
+            System.out.print(prepartitioned[i] + ", ");
+        }
     }
 
-    private static int[] generateStdRep() {
-        Random rand = new Random();
+    private static int[] karmKarp(int[] sequence) {
+        return 0;
+    }
+
+    private static int[] generateStd() {
         int[] rep = new int[100];
         for (int i = 0; i < rep.length; i++) {
             int prob = rand.nextInt(2);
@@ -34,7 +33,7 @@ public class kk{
             }
         }
 
-        System.out.println("Finished initializing array");
+        System.out.println("Finished initializing standard array");
         return rep;
     }
 
@@ -43,9 +42,25 @@ public class kk{
         for (int i = 0; i < sequence.length; i++) {
             residue += sequence[i] * solution[i];
         }
+        return residue;
     }
     
-    private static void generatePPRep() {
+    private static int[] generatePrePart() {
+        int[] rep = new int[100];
+        for (int i = 0; i < rep.length; i++) {
+            rep[i] = rand.nextInt(rep.length + 1) + 1;
+        }
 
+        System.out.println("Finished initializing prepartitioned array");
+        return rep;
     }
+
+    private static int prePartResidue(int[] sequence, int[] solution) {
+        int[] modified = new int[100];
+        for (int i = 0; i < modified.length; i++) {
+            modified[solution[i]] += sequence[i];
+        }
+        return karmKarp(modified);
+    }
+
 }
