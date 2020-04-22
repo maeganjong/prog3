@@ -3,18 +3,19 @@ import java.util.*;
 public class partition{
     final static long MAX_ITER = 25000;
     final static Random rand = new Random();
+
     public static void main (String[] args){
         // Usage: ./partition inputfile
 
-        long[] random = generateStd();
-        for (long i = 0; i < random.length; i++) {
-            System.out.prlong(random[i] + ", ");
+        int[] random = generateStd();
+        for (int i = 0; i < random.length; i++) {
+            System.out.println(random[i] + ", ");
         }
-        // System.out.prlongln("residue: " + stdResidue());
+        // System.out.println("residue: " + stdResidue());
 
-        long[] prepartitioned = generatePrePart();
-        for (long i = 0; i < prepartitioned.length; i++) {
-            System.out.prlong(prepartitioned[i] + ", ");
+        int[] prepartitioned = generatePrePart();
+        for (int i = 0; i < prepartitioned.length; i++) {
+            System.out.println(prepartitioned[i] + ", ");
         }
     }
 
@@ -29,10 +30,10 @@ public class partition{
     }
 
     // Implement Standard Representation
-    private static long[] generateStd() {
-        long[] rep = new long[100];
-        for (long i = 0; i < rep.length; i++) {
-            long prob = rand.nextLong(2);
+    private static int[] generateStd() {
+        int[] rep = new int[100];
+        for (int i = 0; i < rep.length; i++) {
+            int prob = rand.nextInt(2);
             if (prob == 0) {
                 rep[i] = 1;
             }
@@ -41,28 +42,28 @@ public class partition{
             }
         }
 
-        System.out.prlongln("Finished initializing standard array");
+        System.out.println("Finished initializing standard array");
         return rep;
     }
 
-    private static long stdResidue(long[] sequence, long[] solution) {
+    private static long stdResidue(long[] sequence, int[] solution) {
         long residue = 0;
-        for (long i = 0; i < sequence.length; i++) {
+        for (int i = 0; i < sequence.length; i++) {
             residue += sequence[i] * solution[i];
         }
         return residue;
     }
 
-    private static long[] stdNeighbor(long[] solution) {
-      long length = solution.length;
-      long i = rand.nextLong(length);
-      long j = rand.nextLong(length);
+    private static int[] stdNeighbor(int[] solution) {
+      int length = solution.length;
+      int i = rand.nextInt(length);
+      int j = rand.nextInt(length);
       while(i == j){
-        j = rand.nextLong(length);
+        j = rand.nextInt(length);
       }
 
       solution[i] *= -1;
-      long prob = rand.nextLong(2);
+      int prob = rand.nextInt(2);
       if (prob == 0){
         solution[j] *= -1;
       }
@@ -71,60 +72,57 @@ public class partition{
     }
 
     // Implement Prepartition Representation
-    private static long[] generatePrePart() {
-        long[] rep = new long[100];
-        for (long i = 0; i < rep.length; i++) {
-            rep[i] = rand.nextLong(rep.length + 1) + 1;
+    private static int[] generatePrePart() {
+        int[] rep = new int[100];
+        for (int i = 0; i < rep.length; i++) {
+            rep[i] = rand.nextInt(rep.length + 1) + 1;
         }
 
-        System.out.prlongln("Finished initializing prepartitioned array");
+        System.out.println("Finished initializing prepartitioned array");
         return rep;
     }
 
-    private static long prePartResidue(long[] sequence, long[] solution) {
+    private static long prePartResidue(long[] sequence, int[] solution) {
         long[] modified = new long[100];
-        for (long i = 0; i < modified.length; i++) {
+        for (int i = 0; i < modified.length; i++) {
             modified[solution[i]] += sequence[i];
         }
         return karmKarp(modified);
     }
 
-    private static long[] prePartNeighbor(long[] solution){
-        long length = solution.length;
-        long i = rand.nextLong(length);
-        long j = rand.nextLong(length);
+    private static int[] prePartNeighbor(int[] solution){
+        int length = solution.length;
+        int i = rand.nextInt(length);
+        int j = rand.nextInt(length);
         while(solution[i] == j){
-          j = rand.nextLong(length);
+          j = rand.nextInt(length);
         }
-
         solution[i] = j;
-
         return solution;
     }
 
     // Implement Repeated Random
 
     // Implement Hill Climbing
-    private static long[] stdHill(long[] sequence){
-      long[] S = generateStd();
+    private static int[] stdHill(long[] sequence){
+      int[] S = generateStd();
       for (long i = 0; i < MAX_ITER; i++){
-        long[] neighbor = stdNeighbor(S);
+        int[] neighbor = stdNeighbor(S);
         if (stdResidue(sequence, neighbor) < stdResidue(sequence, S)){
-          S = neigbor;
+          S = neighbor;
         }
       }
       return S;
     }
 
-    private static long[] prePartHill(){
-      long[] S = generatePrePart();
-      for (long i = 0; i < MAX_ITER; i++){
-        long[] neighbor = prePartNeighbor(S);
+    private static int[] prePartHill(long[] sequence){
+      int[] S = generatePrePart();
+      for (int i = 0; i < MAX_ITER; i++){
+        int[] neighbor = prePartNeighbor(S);
         if (prePartResidue(sequence, neighbor) < prePartResidue(sequence, S)){
-          S = neigbor;
+          S = neighbor;
         }
       }
-      return S;
       return S;
     }
 
