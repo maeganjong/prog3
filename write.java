@@ -2,9 +2,8 @@ import java.io.*;
 import java.util.*;
 
 public class write{
-  final static int N = 2046;
+  final static int N = 100;
   public static void main(String[] args) {
-    Random r = new Random();
     try {
       File myObj = new File(N + ".txt");
       if (myObj.createNewFile()) {
@@ -21,10 +20,7 @@ public class write{
       FileWriter myWriter = new FileWriter(N + ".txt");
 
       for(int i = 0; i < N; i++){
-        for(int j = 0; j < N; j++){
-          myWriter.write(r.nextInt(3));
-          myWriter.write(r.nextInt(3));
-        }
+        myWriter.write(ThreadLocalRandom.current().nextLong(10^12) + 1);
       }
       myWriter.close();
       System.out.println("Successfully wrote to the file.");
