@@ -18,10 +18,11 @@ public class write{
     }
 
     try {
-      FileWriter myWriter = new FileWriter(N + ".txt");
+      BufferedWriter myWriter = new BufferedWriter(new FileWriter(N + ".txt"));
 
       for(int i = 0; i < N; i++){
-        myWriter.write(ThreadLocalRandom.current().nextLong(10^12) + 1);
+        myWriter.write(Long.toString(ThreadLocalRandom.current().nextLong((long) Math.pow(10,12)) + 1) + "\n");
+        // myWriter.write(ThreadLocalRandom.current().nextLong((long) Math.pow(10,12)) + 1);
       }
       myWriter.close();
       System.out.println("Successfully wrote to the file.");
