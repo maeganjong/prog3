@@ -66,13 +66,14 @@ public class partition{
 
     // Implement KK Algorithm
     private static long karmKarp(long[] sequence) {
-        LinkedList<> seq = new LinkedList<>(Arrays.asList(sequence));
-        Collections.sort(seq); // Sorts in decreasing order
-        while(seq.size() != 1){
-            seq.add(seq.pop() - seq.pop());
-            Collections.sort(seq);
+        Arrays.sort(sequence); // Sorts in decreasing order
+        int i = sequence.length - 1;
+        while(sequence[i - 1] != 0){
+            sequence[i] -= sequence[i - 1];
+            sequence[i-1] = 0;
+            Arrays.sort(sequence);
         }
-        return seq.get(0);
+        return sequence[i];
     }
 
     // Implement Standard Representation
