@@ -1,4 +1,5 @@
 import java.util.*;
+import java.io.*;
 
 public class partition{
     final static long MAX_ITER = 25000;
@@ -6,86 +7,60 @@ public class partition{
 
     public static void main (String[] args){
       try{
-        Scanner scanner = new Scanner(new File(filepath));
-        while(scanner.hasNextInt()){
-
-          if(counter < (dimension * dimension)){
-            if (d >= dimension){
-              row++;
-              d = 0;
-            }
-            mat1[row][counter % dimension] = scanner.nextInt();
-            d++;
-          } else {
-            if (d2 >= dimension){
-              row2++;
-              d2 = 0;
-            }
-            mat2[row2][(counter - (dimension * dimension)) % dimension] = scanner.nextInt();
-            d2++;
-          }
-          counter++;
-        }
-
-      }
-      catch(Exception e){System.out.println(e);}
         // Usage: java partition 0 alg inputfile
         // algorithm codes: 0 - KK; 1 - RR; 2 -- Hill; 3 -- SimAnneal
         //                  11 - PP RR; 12 -- PP Hill; 13 -- PP SimAnneal
 
-        // int alg = Integer.parseInt(args[1]);
-        // String file = args[2];
+        int alg = Integer.parseInt(args[1]);
+        String filepath = args[2];
+        long[] sequence = new long[100];
 
-        // // KK algorithm
-        // if (alg == 0) {
-        //   System.out.println("Karmarkar-Karp");
-        // }
-
-        // // Standard repeated random
-        // else if (alg == 1) {
-        //   System.out.println("Standard repeated random");
-        // }
-
-        // // Standard hill climbing
-        // else if (alg == 2) {
-        //   System.out.println("Standard hill climbing");
-        // }
-
-        // // Standard simulated annealing
-        // else if (alg == 3) {
-        //   System.out.println("Standard simulated annaeling");
-        // }
-
-        // // Prepartitioned repeated random
-        // else if (alg == 11) {
-        //   System.out.println("Preapartitioned repeated random");
-        // }
-
-        // // Prepartitioned hill climbing
-        // else if (alg == 12) {
-        //   System.out.println("Prepartitioned hill climbing");
-        // }
-
-        // // Prepartitioned simulated annealing
-        // else if (alg == 13) {
-        //   System.out.println("Prepartitioned simulated annealing");
-        // }
-
-        // else {
-        //   System.out.println("Usage: ./partition 0 alg inputfile");
-        // }
-
-
-        int[] random = generateStd();
-        for (int i = 0; i < random.length; i++) {
-            System.out.println(random[i] + ", ");
+        // Read file into array
+        Scanner scanner = new Scanner(new File(filepath));
+        int counter = 0;
+        while (scanner.hasNextLong()){
+          sequence[counter] = scanner.nextLong();
+          counter++;
         }
-        // System.out.println("residue: " + stdResidue());
 
+        // KK algorithm
+        if (alg == 0) {
+          System.out.println("Karmarkar-Karp residue: " + karmKarp(sequence));
+        }
+
+        // Standard representation
+        else if (alg == 1 || alg == 2 || alg == 3) {
+          int[] random = generateStd();
+          if (alg == 1) {
+
+          }
+          else if (alg == 2) {
+            // Standard hill climbing
+          }
+          else {
+            // Simulated annealing
+          }
+
+        // Prepartitioned repeated random
+        else if (alg == 11) {
+          System.out.println("Preapartitioned repeated random");
+        }
+
+        // Prepartitioned hill climbing
+        else if (alg == 12) {
+          System.out.println("Prepartitioned hill climbing");
+        }
+
+        // Prepartitioned simulated annealing
+        else if (alg == 13) {
+          System.out.println("Prepartitioned simulated annealing");
+        }
+        
         int[] prepartitioned = generatePrePart();
-        for (int i = 0; i < prepartitioned.length; i++) {
-            System.out.println(prepartitioned[i] + ", ");
-        }
+        System.out.println("PP residue: " + prePartResidue(sequence, prepartitioned));
+
+      }
+      catch(Exception e){System.out.println("Usage: java partition 0 alg inputfile");}
     }
 
     // Implement KK Algorithm
@@ -112,8 +87,6 @@ public class partition{
                 rep[i] = -1;
             }
         }
-
-        System.out.println("Finished initializing standard array");
         return rep;
     }
 
@@ -122,7 +95,7 @@ public class partition{
         for (int i = 0; i < sequence.length; i++) {
             residue += sequence[i] * solution[i];
         }
-        return residue;
+        return Math.abs(residue);
     }
 
     private static int[] stdNeighbor(int[] solution) {
@@ -149,7 +122,6 @@ public class partition{
             rep[i] = rand.nextInt(rep.length);
         }
 
-        System.out.println("Finished initializing prepartitioned array");
         return rep;
     }
 
