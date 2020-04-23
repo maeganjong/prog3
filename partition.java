@@ -64,9 +64,9 @@ public class partition{
         // }
     }
 
-    Implement KK Algorithm
+    // Implement KK Algorithm
     private static long karmKarp(long[] sequence) {
-        LinkedList<long> seq = new LinkedList<>(Arrays.asList(sequence));
+        LinkedList<> seq = new LinkedList<>(Arrays.asList(sequence));
         Collections.sort(seq); // Sorts in decreasing order
         while(seq.size() != 1){
             seq.add(seq.pop() - seq.pop());
