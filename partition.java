@@ -5,6 +5,30 @@ public class partition{
     final static Random rand = new Random();
 
     public static void main (String[] args){
+      try{
+        Scanner scanner = new Scanner(new File(filepath));
+        while(scanner.hasNextInt()){
+
+          if(counter < (dimension * dimension)){
+            if (d >= dimension){
+              row++;
+              d = 0;
+            }
+            mat1[row][counter % dimension] = scanner.nextInt();
+            d++;
+          } else {
+            if (d2 >= dimension){
+              row2++;
+              d2 = 0;
+            }
+            mat2[row2][(counter - (dimension * dimension)) % dimension] = scanner.nextInt();
+            d2++;
+          }
+          counter++;
+        }
+
+      }
+      catch(Exception e){System.out.println(e);}
         // Usage: java partition 0 alg inputfile
         // algorithm codes: 0 - KK; 1 - RR; 2 -- Hill; 3 -- SimAnneal
         //                  11 - PP RR; 12 -- PP Hill; 13 -- PP SimAnneal
