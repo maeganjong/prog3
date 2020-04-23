@@ -21,12 +21,13 @@ public class partition{
 
     // Implement KK Algorithm
     private static long karmKarp(long[] sequence) {
-        Arrays.sort(sequence); // Sorts in decreasing order
-        while(sequence.length != 1){
-            sequence.push(sequence.pop() - sequence.pop());
-            Arrays.sort(sequence);
+        LinkedList<long> seq = new LinkedList<>(Arrays.asList(sequence));
+        Collections.sort(seq); // Sorts in decreasing order
+        while(seq.size() != 1){
+            seq.add(seq.pop() - seq.pop());
+            Collections.sort(seq);
         }
-        return sequence[0];
+        return seq.get(0);
     }
 
     // Implement Standard Representation
@@ -105,28 +106,73 @@ public class partition{
 
     // Implement Hill Climbing
     private static int[] stdHill(long[] sequence){
-      int[] S = generateStd();
-      for (long i = 0; i < MAX_ITER; i++){
-        int[] neighbor = stdNeighbor(S);
-        if (stdResidue(sequence, neighbor) < stdResidue(sequence, S)){
-          S = neighbor;
+        int[] S = generateStd();
+        for (long i = 0; i < MAX_ITER; i++){
+          int[] neighbor = stdNeighbor(S);
+          if (stdResidue(sequence, neighbor) < stdResidue(sequence, S)){
+            S = neighbor;
+          }
         }
-      }
-      return S;
+        return S;
     }
 
     private static int[] prePartHill(long[] sequence){
-      int[] S = generatePrePart();
-      for (int i = 0; i < MAX_ITER; i++){
-        int[] neighbor = prePartNeighbor(S);
-        if (prePartResidue(sequence, neighbor) < prePartResidue(sequence, S)){
-          S = neighbor;
+        int[] S = generatePrePart();
+        for (int i = 0; i < MAX_ITER; i++){
+          int[] neighbor = prePartNeighbor(S);
+          if (prePartResidue(sequence, neighbor) < prePartResidue(sequence, S)){
+            S = neighbor;
+          }
         }
-      }
-      return S;
+        return S;
     }
 
-
     // Implement Simulated Annealing
+    private static int[] stdSimAnn(long[] sequence){
+        int[] S = generateStd();
+        int[] buffer = S;
+        for (int i = 0; i < MAX_ITER; i++){
+            int[] neighbor = stdNeighbor(S);
+            if (stdResidue(sequence, neighbor) < stdResidue(sequence, S)){
+              S = neighbor;
+            }
+            else{
+              if(rand.nextDouble() < Math.exp(-1 * (stdResidue(sequence, neighbor) - stdResidue(sequence, S) / T(i)))){
+                S = neighbor;
+              }
+            }
 
+            if (stdResidue(sequence, S) < stdResidue(sequence, buffer)){
+              buffer = S;
+            }
+        }
+
+        return buffer;
+    }
+
+    private static int[] prePartSimAnn(long[] sequence){
+      int[] S = generatePrePart();
+      int[] buffer = S;
+      for (int i = 0; i < MAX_ITER; i++){
+          int[] neighbor = prePartNeighbor(S);
+          if (prePartResidue(sequence, neighbor) < prePartResidue(sequence, S)){
+            S = neighbor;
+          }
+          else{
+            if(rand.nextDouble() < Math.exp(-1 * (prePartResidue(sequence, neighbor) - prePartResidue(sequence, S)) / T(i))){
+              S = neighbor;
+            }
+          }
+
+          if (prePartResidue(sequence, S) < prePartResidue(sequence, buffer)){
+            buffer = S;
+          }
+      }
+
+      return buffer;
+    }
+
+    private static double T(int iter){
+      return Math.pow(10,10) * Math.pow(0.8, Math.floor(iter / 300));
+    }
 }
