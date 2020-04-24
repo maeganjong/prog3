@@ -15,6 +15,7 @@ public class partition{
         String filepath = args[2];
         long[] sequence = new long[100];
 
+
         // Read file into array
         Scanner scanner = new Scanner(new File(filepath));
         int counter = 0;
@@ -23,42 +24,33 @@ public class partition{
           counter++;
         }
 
-        // KK algorithm
+        // // KK algorithm
         if (alg == 0) {
           System.out.println("Karmarkar-Karp residue: " + karmKarp(sequence));
         }
 
-        // Standard representation
-        else if (alg == 1 || alg == 2 || alg == 3) {
+        // Standard repeated random
+        if (alg == 1) {
           int[] random = generateStd();
-          if (alg == 1) {
-
-          }
-          else if (alg == 2) {
-            // Standard hill climbing
-          }
-          else {
-            // Simulated annealing
-          }
-
-        // Prepartitioned repeated random
-        else if (alg == 11) {
-          System.out.println("Preapartitioned repeated random");
+          System.out.println("STD Residue: " + stdResidue(sequence, random));
         }
-
-        // Prepartitioned hill climbing
-        else if (alg == 12) {
-          System.out.println("Prepartitioned hill climbing");
+        else if (alg == 2) {
+          // Standard hill climbing
         }
-
-        // Prepartitioned simulated annealing
-        else if (alg == 13) {
-          System.out.println("Prepartitioned simulated annealing");
+        else if (alg == 3) {
+          // Simulated annealing
         }
         
-        int[] prepartitioned = generatePrePart();
-        System.out.println("PP residue: " + prePartResidue(sequence, prepartitioned));
-
+        // Prepart repeated random
+        else if (alg == 11) {
+          int[] prepart = generatePrePart();
+        }
+        else if (alg == 12) {
+          // Hill climbing
+        }
+        else if (alg == 13) {
+          // Simulated annealing
+        }
       }
       catch(Exception e){System.out.println("Usage: java partition 0 alg inputfile");}
     }
