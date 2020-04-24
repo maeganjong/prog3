@@ -24,32 +24,45 @@ public class partition{
           counter++;
         }
 
-        // // KK algorithm
+        // KK algorithm
         if (alg == 0) {
           System.out.println("Karmarkar-Karp residue: " + karmKarp(sequence));
         }
 
         // Standard repeated random
         if (alg == 1) {
-          int[] random = generateStd();
-          System.out.println("STD Residue: " + stdResidue(sequence, random));
+          int[] sol = stdRepRand(sequence);
+          System.out.println("STD repeated random: " + stdResidue(sequence, sol));
         }
+
+        // Standard hill
         else if (alg == 2) {
-          // Standard hill climbing
+          int[] sol = stdHill(sequence);
+          System.out.println("STD hill: " + stdResidue(sequence, sol));
         }
+
+        // Standard simulated annealing
         else if (alg == 3) {
-          // Simulated annealing
+          int[] sol = stdSimAnn(sequence);
+          System.out.println("STD hill: " + stdResidue(sequence, sol));
         }
         
         // Prepart repeated random
         else if (alg == 11) {
-          int[] prepart = generatePrePart();
+          int[] sol =  prePartRepRand(sequence);
+          System.out.println("PP repeated random: " + prePartResidue(sequence, sol));
         }
+        
+        // Prepart hill climbing
         else if (alg == 12) {
-          // Hill climbing
+          int[] sol =  prePartHill(sequence);
+          System.out.println("PP hill climbing: " + prePartResidue(sequence, sol));
         }
+
+        // Prepart simulated annealing
         else if (alg == 13) {
-          // Simulated annealing
+          int[] sol =  prePartSimAnn(sequence);
+          System.out.println("PP sim anneal: " + prePartResidue(sequence, sol));
         }
       }
       catch(Exception e){System.out.println("Usage: java partition 0 alg inputfile");}
