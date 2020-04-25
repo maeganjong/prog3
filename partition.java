@@ -10,7 +10,7 @@ public class partition{
         // Usage: java partition 0 alg inputfile
         // algorithm codes: 0 - KK; 1 - RR; 2 -- Hill; 3 -- SimAnneal
         //                  11 - PP RR; 12 -- PP Hill; 13 -- PP SimAnneal
-
+        int bool = Integer.parseInt(args[0]);
         int alg = Integer.parseInt(args[1]);
         String filepath = args[2];
         long[] sequence = new long[100];
@@ -23,49 +23,66 @@ public class partition{
           sequence[counter] = scanner.nextLong();
           counter++;
         }
+        long startTime = 0;
 
+        if (bool == 1) {
+          startTime = System.nanoTime(); // stores the current time
+        }
         // KK algorithm
         if (alg == 0) {
-          System.out.println("Karmarkar-Karp residue: " + karmKarp(sequence));
+          //System.out.println("Karmarkar-Karp residue: " + karmKarp(sequence));
+          System.out.println(karmKarp(sequence));
         }
 
         // Standard repeated random
         if (alg == 1) {
           int[] sol = stdRepRand(sequence);
-          System.out.println("STD repeated random: " + stdResidue(sequence, sol));
+          //System.out.println("STD repeated random: " + stdResidue(sequence, sol));
+          System.out.println(stdResidue(sequence, sol));
         }
 
         // Standard hill
         else if (alg == 2) {
           int[] sol = stdHill(sequence);
-          System.out.println("STD hill: " + stdResidue(sequence, sol));
+          //System.out.println("STD hill: " + stdResidue(sequence, sol));
+          System.out.println( stdResidue(sequence, sol));
         }
 
         // Standard simulated annealing
         else if (alg == 3) {
           int[] sol = stdSimAnn(sequence);
-          System.out.println("STD hill: " + stdResidue(sequence, sol));
+          //System.out.println("STD hill: " + stdResidue(sequence, sol));
+          System.out.println(stdResidue(sequence, sol));
         }
-        
+
         // Prepart repeated random
         else if (alg == 11) {
           int[] sol =  prePartRepRand(sequence);
-          System.out.println("PP repeated random: " + prePartResidue(sequence, sol));
+          //System.out.println("PP repeated random: " + prePartResidue(sequence, sol));
+          System.out.println(prePartResidue(sequence, sol));
         }
-        
+
         // Prepart hill climbing
         else if (alg == 12) {
           int[] sol =  prePartHill(sequence);
-          System.out.println("PP hill climbing: " + prePartResidue(sequence, sol));
+          //System.out.println("PP hill climbing: " + prePartResidue(sequence, sol));
+          System.out.println( prePartResidue(sequence, sol));
         }
 
         // Prepart simulated annealing
         else if (alg == 13) {
           int[] sol =  prePartSimAnn(sequence);
-          System.out.println("PP sim anneal: " + prePartResidue(sequence, sol));
+          //System.out.println("PP sim anneal: " + prePartResidue(sequence, sol));
+          System.out.println(prePartResidue(sequence, sol));
         }
+
       }
       catch(Exception e){System.out.println("Usage: java partition 0 alg inputfile");}
+
+      if (bool == 1) {
+        System.out.println("Time: " + (System.nanoTime() - startTime)/Math.pow(10,9) + "sec");
+        startTime = System.nanoTime();
+      }
     }
 
     // Implement KK Algorithm
