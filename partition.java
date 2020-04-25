@@ -66,7 +66,7 @@ public class partition{
         else if (alg == 12) {
           int[] sol =  prePartHill(sequence);
           //System.out.println("PP hill climbing: " + prePartResidue(sequence, sol));
-          System.out.println( prePartResidue(sequence, sol));
+          System.out.println(prePartResidue(sequence, sol));
         }
 
         // Prepart simulated annealing
@@ -76,13 +76,13 @@ public class partition{
           System.out.println(prePartResidue(sequence, sol));
         }
 
-      }
-      catch(Exception e){System.out.println("Usage: java partition 0 alg inputfile");}
-
-      if (bool == 1) {
+        if (bool == 1) {
         System.out.println("Time: " + (System.nanoTime() - startTime)/Math.pow(10,9) + "sec");
         startTime = System.nanoTime();
       }
+
+      }
+      catch(Exception e){System.out.println("Usage: java partition 0 alg inputfile");}      
     }
 
     // Implement KK Algorithm
@@ -191,70 +191,68 @@ public class partition{
 
     // Implement Hill Climbing
     private static int[] stdHill(long[] sequence){
-        int[] S = generateStd();
+        int[] curr = generateStd();
+        int[] best = curr.clone();
+
         for (int i = 0; i < MAX_ITER; i++){
-          int[] neighbor = stdNeighbor(S);
-          if (stdResidue(sequence, neighbor) < stdResidue(sequence, S)){
-            S = neighbor;
+          curr = stdNeighbor(curr);
+          if (stdResidue(sequence, curr) < stdResidue(sequence, best)) {
+            best = curr.clone();
           }
         }
-        return S;
+        return best;
     }
 
     private static int[] prePartHill(long[] sequence){
-        int[] S = generatePrePart();
+        int[] curr = generatePrePart();
+        int[] best = curr.clone();
+
         for (int i = 0; i < MAX_ITER; i++){
-          int[] neighbor = prePartNeighbor(S);
-          if (prePartResidue(sequence, neighbor) < prePartResidue(sequence, S)){
-            S = neighbor;
+          curr = prePartNeighbor(curr);
+          if (prePartResidue(sequence, curr) < prePartResidue(sequence, best)){
+            best = curr.clone();
           }
         }
-        return S;
+        return best;
     }
 
     // Implement Simulated Annealing
     private static int[] stdSimAnn(long[] sequence){
-        int[] S = generateStd();
-        int[] buffer = S;
-        for (int i = 0; i < MAX_ITER; i++){
-            int[] neighbor = stdNeighbor(S);
-            if (stdResidue(sequence, neighbor) < stdResidue(sequence, S)){
-              S = neighbor;
-            }
-            else{
-              if(rand.nextDouble() < Math.exp(-1 * (stdResidue(sequence, neighbor) - stdResidue(sequence, S) / T(i)))){
-                S = neighbor;
-              }
-            }
+        int[] curr = generateStd();
+        int[] better = curr.clone();
+        int[] best = curr.clone();
 
-            if (stdResidue(sequence, S) < stdResidue(sequence, buffer)){
-              buffer = S;
+        for (int i = 0; i < MAX_ITER; i++){
+            curr = stdNeighbor(curr);
+            double cool = Math.exp(-1 * (stdResidue(sequence, curr) - stdResidue(sequence, better) / T(i)));
+            if (stdResidue(sequence, curr) < stdResidue(sequence, better) || rand.nextDouble() < cool){
+              better = curr.clone();
+            }
+            if (stdResidue(sequence, better) < stdResidue(sequence, best)){
+              best = better.clone();
             }
         }
 
-        return buffer;
+        return best;
     }
 
     private static int[] prePartSimAnn(long[] sequence){
-      int[] S = generatePrePart();
-      int[] buffer = S;
+      int[] curr = generatePrePart();
+      int[] better = curr.clone();
+      int[] best = curr.clone();
       for (int i = 0; i < MAX_ITER; i++){
-          int[] neighbor = prePartNeighbor(S);
-          if (prePartResidue(sequence, neighbor) < prePartResidue(sequence, S)){
-            S = neighbor;
-          }
-          else{
-            if(rand.nextDouble() < Math.exp(-1 * (prePartResidue(sequence, neighbor) - prePartResidue(sequence, S)) / T(i))){
-              S = neighbor;
-            }
+          curr = prePartNeighbor(curr);
+          double cool = Math.exp(-1 * (prePartResidue(sequence, curr) - prePartResidue(sequence, better)) / T(i));
+          if (prePartResidue(sequence, curr) < prePartResidue(sequence, better) || rand.nextDouble() < cool){
+            better = curr.clone();
           }
 
-          if (prePartResidue(sequence, S) < prePartResidue(sequence, buffer)){
-            buffer = S;
+          if (prePartResidue(sequence, better) < prePartResidue(sequence, best)){
+            best = better.clone();
           }
       }
 
-      return buffer;
+      return best;
     }
 
     private static double T(int iter){
