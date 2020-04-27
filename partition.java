@@ -79,7 +79,7 @@ public class partition{
         if (bool == 1) {
         System.out.println("Time: " + (System.nanoTime() - startTime)/Math.pow(10,9) + "sec");
         startTime = System.nanoTime();
-      }
+        }
 
       }
       catch(Exception e){System.out.println("Usage: java partition 0 alg inputfile");}      
@@ -87,14 +87,77 @@ public class partition{
 
     // Implement KK Algorithm
     private static long karmKarp(long[] sequence) {
-        Arrays.sort(sequence); // Sorts in decreasing order
-        int i = sequence.length - 1;
-        while(sequence[i - 1] != 0){
-            sequence[i] -= sequence[i - 1];
-            sequence[i-1] = 0;
-            Arrays.sort(sequence);
+      int size = sequence.length;
+      buildHeap(sequence);
+
+      while (size > 1) {
+        long max1 = extractMax(sequence, size);
+        size--;
+        long max2 = extractMax(sequence, size);
+        long diff = max1 - max2;
+        insert(sequence, diff, size);
+      }
+
+      return sequence[0];
+    }
+
+    // Inserts value into the heap by changing one of the 0s to val
+    private static void insert(long[] arr, long val, int size) {
+      arr[size - 1] = val;
+      int index = size - 1;
+      while (index != 0) {
+        int parent = (index - 1) / 2;
+        if (arr[parent] < arr[index]) {
+          long temp = arr[parent];
+          arr[parent] = arr[index];
+          arr[index] = temp;
+          index = parent;
         }
-        return sequence[i];
+        else {
+          break;
+        }
+      }
+    }
+
+    // Returns the max element from the heap and fixes everything else
+    private static long extractMax(long[] arr, int size) {
+      long max = arr[0];
+      arr[0] = arr[size - 1];
+      arr[size - 1] = 0;
+      maxHeapify(arr, 0);
+      return max;
+    }
+
+    // Function for creating max heap
+    private static void buildHeap(long[] arr) {
+      int start = arr.length / 2;
+      for (int i = start; i >= 0; i--) {
+        maxHeapify(arr, i);
+      }
+    }
+
+    // Recursive call for max heap algorithm
+    private static void maxHeapify(long[] arr, int i) {
+      int max = i;
+      int left = 2 * i + 1;
+      int right = 2 * i + 2;
+
+      if ((left < arr.length) && (arr[left] > arr[max])) {
+        max = left;
+      }
+
+      if ((right < arr.length) && (arr[right] > arr[max])) {
+        max = right;
+      }
+
+      if (max != i) {
+        long temp = arr[i];
+        arr[i] = arr[max];
+        arr[max] = temp;
+
+        maxHeapify(arr, max);
+      }
+
     }
 
     // Implement Standard Representation
