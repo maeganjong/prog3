@@ -30,49 +30,42 @@ public class partition{
         }
         // KK algorithm
         if (alg == 0) {
-          //System.out.println("Karmarkar-Karp residue: " + karmKarp(sequence));
           System.out.println(karmKarp(sequence));
         }
 
         // Standard repeated random
         if (alg == 1) {
           int[] sol = stdRepRand(sequence);
-          //System.out.println("STD repeated random: " + stdResidue(sequence, sol));
           System.out.println(stdResidue(sequence, sol));
         }
 
         // Standard hill
         else if (alg == 2) {
           int[] sol = stdHill(sequence);
-          //System.out.println("STD hill: " + stdResidue(sequence, sol));
-          System.out.println( stdResidue(sequence, sol));
+          System.out.println(stdResidue(sequence, sol));
         }
 
         // Standard simulated annealing
         else if (alg == 3) {
           int[] sol = stdSimAnn(sequence);
-          //System.out.println("STD hill: " + stdResidue(sequence, sol));
           System.out.println(stdResidue(sequence, sol));
         }
 
         // Prepart repeated random
         else if (alg == 11) {
           int[] sol =  prePartRepRand(sequence);
-          //System.out.println("PP repeated random: " + prePartResidue(sequence, sol));
           System.out.println(prePartResidue(sequence, sol));
         }
 
         // Prepart hill climbing
         else if (alg == 12) {
           int[] sol =  prePartHill(sequence);
-          //System.out.println("PP hill climbing: " + prePartResidue(sequence, sol));
           System.out.println(prePartResidue(sequence, sol));
         }
 
         // Prepart simulated annealing
         else if (alg == 13) {
           int[] sol =  prePartSimAnn(sequence);
-          //System.out.println("PP sim anneal: " + prePartResidue(sequence, sol));
           System.out.println(prePartResidue(sequence, sol));
         }
 
@@ -145,19 +138,15 @@ public class partition{
       if ((left < arr.length) && (arr[left] > arr[max])) {
         max = left;
       }
-
       if ((right < arr.length) && (arr[right] > arr[max])) {
         max = right;
       }
-
       if (max != i) {
         long temp = arr[i];
         arr[i] = arr[max];
         arr[max] = temp;
-
         maxHeapify(arr, max);
       }
-
     }
 
     // Implement Standard Representation
@@ -196,7 +185,6 @@ public class partition{
       if (prob == 0){
         solution[j] *= -1;
       }
-
       return solution;
     }
 
@@ -206,7 +194,6 @@ public class partition{
         for (int i = 0; i < rep.length; i++) {
             rep[i] = rand.nextInt(rep.length);
         }
-
         return rep;
     }
 
@@ -295,7 +282,6 @@ public class partition{
               best = better.clone();
             }
         }
-
         return best;
     }
 
@@ -309,12 +295,10 @@ public class partition{
           if (prePartResidue(sequence, curr) < prePartResidue(sequence, better) || rand.nextDouble() < cool){
             better = curr.clone();
           }
-
           if (prePartResidue(sequence, better) < prePartResidue(sequence, best)){
             best = better.clone();
           }
       }
-
       return best;
     }
 
